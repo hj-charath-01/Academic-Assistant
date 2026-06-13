@@ -27,7 +27,7 @@ st.set_page_config(
 st.markdown(
     """
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&family=Material+Symbols+Rounded:wght@400');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
 :root {
     --bg: #f6f1e8;
@@ -43,79 +43,73 @@ st.markdown(
     --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
 }
 
-*, *::before, *::after {
-    box-sizing: border-box;
+/* ── App background (background only — never color/font on html/body,
+       so Streamlit's portaled menus don't inherit our theme) ───────────── */
+html, body {
+    background: var(--bg);
 }
-
-html, body, [data-testid="stAppViewContainer"], [data-testid="stMain"], .main, .block-container {
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"] {
     background: var(--bg) !important;
-    color: var(--text) !important;
 }
-
 .block-container {
     padding-top: 2rem;
     padding-bottom: 2rem;
     max-width: 1300px;
 }
-
-/* Top bar / sidebar toggle */
 [data-testid="stHeader"] {
     background: transparent !important;
 }
-button[data-testid="collapsedControl"] {
-    font-family: "Material Symbols Rounded" !important;
-    font-size: 20px !important;
-    line-height: 1 !important;
-    color: #cbd5e1 !important;
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-button[data-testid="collapsedControl"] * {
-    font-family: "Material Symbols Rounded" !important;
-}
-button[data-testid="collapsedControl"] svg {
-    display: none !important;
-}
 
-/* Sidebar */
+/* ── Sidebar shell ─────────────────────────────────────────────────────── */
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, var(--sidebar) 0%, var(--sidebar-2) 100%) !important;
-    border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
 }
-[data-testid="stSidebar"] * {
-    color: #dbe4f0 !important;
+
+/* ── Sidebar text (scoped to content containers only — the
+       collapse/expand toggle and header chrome are siblings of these
+       containers, never descendants, so they're left untouched) ────────── */
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] {
+    color: #dbe4f0;
 }
-[data-testid="stSidebar"] h1,
-[data-testid="stSidebar"] h2,
-[data-testid="stSidebar"] h3,
-[data-testid="stSidebar"] h4 {
-    color: #f8fafc !important;
-    font-family: 'DM Serif Display', Georgia, serif !important;
-    font-weight: 400 !important;
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h1,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h2,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h3,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] h4 {
+    color: #f8fafc;
+    font-family: 'DM Serif Display', Georgia, serif;
+    font-weight: 400;
 }
-[data-testid="stSidebar"] .stSelectbox label,
-[data-testid="stSidebar"] .stSlider label,
-[data-testid="stSidebar"] .stFileUploader label {
-    color: #94a3b8 !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 0.72rem !important;
-    font-weight: 700 !important;
+[data-testid="stSidebar"] [data-testid="stCaptionContainer"] {
+    color: #94a3b8;
+}
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+    color: #94a3b8;
+}
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
-[data-testid="stSidebar"] [data-testid="stSelectbox"] > div > div {
+
+/* ── Sidebar selectbox (BaseWeb component) ────────────────────────────── */
+[data-testid="stSidebar"] [data-baseweb="select"] {
     background: #1f2937 !important;
     border: 1px solid #334155 !important;
     border-radius: 10px !important;
 }
-[data-testid="stSidebar"] [data-testid="stFileUploader"] {
+[data-testid="stSidebar"] [data-baseweb="select"] > div {
     background: #1f2937 !important;
-    border: 1px dashed #475569 !important;
-    border-radius: 12px !important;
-    padding: 0.75rem !important;
+    border-radius: 10px !important;
+    color: #e2e8f0;
 }
-[data-testid="stSidebar"] [data-testid="stButton"] > button {
+
+/* ── Sidebar buttons (st.button only — the file-uploader's "Browse files"
+       button has no stButton wrapper, so it's unaffected) ────────────────── */
+[data-testid="stSidebar"] [data-testid="stButton"] button {
     background: #1f2937 !important;
     border: 1px solid #334155 !important;
     color: #e2e8f0 !important;
@@ -124,26 +118,38 @@ button[data-testid="collapsedControl"] svg {
     font-weight: 600 !important;
     font-size: 0.85rem !important;
     padding: 0.55rem 0.9rem !important;
-    width: 100% !important;
+    width: 100%;
 }
-[data-testid="stSidebar"] [data-testid="stButton"] > button:hover {
+[data-testid="stSidebar"] [data-testid="stButton"] button:hover {
     background: #334155 !important;
     border-color: var(--accent) !important;
     color: #ffffff !important;
 }
 
-/* Main typography */
-h1, h2, h3, h4 {
-    font-family: 'DM Serif Display', Georgia, serif !important;
-    color: var(--text) !important;
-    font-weight: 400 !important;
+/* ── File uploader: style the dropzone container only — leave Streamlit's
+       own layout/positioning of the icon, text, and Browse button alone ──── */
+[data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
+    background: #1f2937 !important;
+    border: 1px dashed #475569 !important;
+    border-radius: 12px !important;
 }
-p, li, span, label, caption, div {
-    font-family: 'Inter', sans-serif !important;
+[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] span,
+[data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] small {
+    color: #cbd5e1;
 }
 
-/* Main area buttons */
-[data-testid="stButton"] > button {
+/* ── Main typography ───────────────────────────────────────────────────── */
+.block-container [data-testid="stMarkdownContainer"] h1,
+.block-container [data-testid="stMarkdownContainer"] h2,
+.block-container [data-testid="stMarkdownContainer"] h3,
+.block-container [data-testid="stMarkdownContainer"] h4 {
+    font-family: 'DM Serif Display', Georgia, serif;
+    color: var(--text);
+    font-weight: 400;
+}
+
+/* ── Main-area buttons (example chips) ───────────────────────────────────── */
+.block-container [data-testid="stButton"] button {
     background: #ffffff !important;
     color: var(--text) !important;
     border: 1px solid var(--line) !important;
@@ -155,31 +161,32 @@ p, li, span, label, caption, div {
     text-align: left !important;
     white-space: normal !important;
     line-height: 1.35 !important;
+    width: 100%;
 }
-[data-testid="stButton"] > button:hover {
+.block-container [data-testid="stButton"] button:hover {
     border-color: var(--accent) !important;
     background: #fff7ed !important;
     color: #111827 !important;
 }
 
-/* Form submit button only */
-[data-testid="stForm"] [data-testid="stButton"] > button {
+/* ── Form submit button ───────────────────────────────────────────────────── */
+[data-testid="stForm"] [data-testid="stButton"] button {
     background: var(--sidebar) !important;
     color: #ffffff !important;
     border: none !important;
     border-radius: 12px !important;
     font-weight: 700 !important;
     letter-spacing: 0.02em;
-    width: 100% !important;
+    width: 100%;
     padding: 0.85rem 1rem !important;
     box-shadow: var(--shadow) !important;
     text-align: center !important;
 }
-[data-testid="stForm"] [data-testid="stButton"] > button:hover {
+[data-testid="stForm"] [data-testid="stButton"] button:hover {
     background: var(--accent) !important;
 }
 
-/* Textarea */
+/* ── Textarea ─────────────────────────────────────────────────────────────── */
 [data-testid="stForm"] textarea {
     background: #ffffff !important;
     border: 1.5px solid #cbd5e1 !important;
@@ -196,7 +203,7 @@ p, li, span, label, caption, div {
     box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.12) !important;
 }
 
-/* User bubble */
+/* ── User chat bubble (self-contained custom markup) ─────────────────────── */
 .user-bubble {
     display: flex;
     flex-direction: column;
@@ -210,6 +217,7 @@ p, li, span, label, caption, div {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
+    font-family: 'Inter', sans-serif;
 }
 .user-bubble .bubble-inner {
     background: var(--sidebar);
@@ -219,10 +227,13 @@ p, li, span, label, caption, div {
     max-width: 75%;
     font-size: 0.96rem;
     line-height: 1.6;
+    font-family: 'Inter', sans-serif;
     box-shadow: var(--shadow);
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
-/* Assistant bubble */
+/* ── Assistant header / mode pills ────────────────────────────────────────── */
 .assistant-header {
     display: flex;
     align-items: center;
@@ -235,34 +246,8 @@ p, li, span, label, caption, div {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-weight: 700;
+    font-family: 'Inter', sans-serif;
 }
-.assistant-body {
-    background: #ffffff;
-    border-radius: 6px 18px 18px 18px;
-    padding: 16px 20px;
-    border-left: 4px solid var(--accent);
-    font-size: 0.96rem;
-    line-height: 1.7;
-    color: #1e293b;
-    box-shadow: var(--shadow);
-    max-width: 90%;
-}
-.assistant-body p, .assistant-body li, .assistant-body span {
-    color: #1e293b !important;
-}
-.assistant-body h2, .assistant-body h3 {
-    color: #0f172a !important;
-}
-.assistant-body code {
-    font-family: 'DM Mono', monospace;
-    font-size: 0.86em;
-    background: #f1f5f9;
-    padding: 1px 5px;
-    border-radius: 4px;
-    color: #0f172a;
-}
-
-/* Pills */
 .pill {
     display: inline-block;
     font-size: 0.68rem;
@@ -276,7 +261,40 @@ p, li, span, label, caption, div {
 .pill-syllabus { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 .pill-research { background: #ede9fe; color: #5b21b6; border: 1px solid #ddd6fe; }
 
-/* Source reference */
+/* ── Assistant response card (rendered via a single st.markdown call so
+       this div actually wraps the generated content) ────────────────────── */
+.assistant-body {
+    background: #ffffff;
+    border-radius: 6px 18px 18px 18px;
+    padding: 16px 20px;
+    border-left: 4px solid var(--accent);
+    box-shadow: var(--shadow);
+    max-width: 90%;
+}
+.assistant-body p,
+.assistant-body li,
+.assistant-body span,
+.assistant-body strong,
+.assistant-body em {
+    color: #1e293b !important;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 0.96rem;
+    line-height: 1.7;
+}
+.assistant-body h2, .assistant-body h3 {
+    color: #0f172a !important;
+    font-family: 'Inter', sans-serif !important;
+}
+.assistant-body code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.86em;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: #0f172a;
+}
+
+/* ── Source reference cards ──────────────────────────────────────────────── */
 .source-ref {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -284,6 +302,7 @@ p, li, span, label, caption, div {
     padding: 10px 14px;
     margin: 6px 0;
     font-size: 0.82rem;
+    font-family: 'Inter', sans-serif;
     color: #475569;
     line-height: 1.5;
     box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
@@ -291,10 +310,11 @@ p, li, span, label, caption, div {
 .source-ref strong { color: #0f172a; font-weight: 700; }
 .source-ref em { color: #64748b; font-style: normal; }
 
-/* Example labels */
+/* ── Example-question section labels ─────────────────────────────────────── */
 .ex-section-label {
     font-size: 0.72rem;
     font-weight: 800;
+    font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: #6b7280;
@@ -302,7 +322,7 @@ p, li, span, label, caption, div {
     margin-top: 4px;
 }
 
-/* Stats */
+/* ── Stat chips ───────────────────────────────────────────────────────────── */
 .stat-row { display: flex; gap: 8px; margin: 6px 0; }
 .stat-chip {
     flex: 1;
@@ -321,6 +341,7 @@ p, li, span, label, caption, div {
 .stat-chip .lbl {
     display: block;
     font-size: 0.66rem;
+    font-family: 'Inter', sans-serif;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: #94a3b8;
@@ -328,7 +349,7 @@ p, li, span, label, caption, div {
     font-weight: 700;
 }
 
-/* Status */
+/* ── Ollama status dot ────────────────────────────────────────────────────── */
 .status-dot {
     display: inline-block;
     width: 8px;
@@ -340,32 +361,25 @@ p, li, span, label, caption, div {
 .dot-ok { background: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.18); }
 .dot-err { background: #ef4444; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.18); }
 
-/* Expander */
-[data-testid="stExpander"] {
+/* ── Expander (source chunks) ─────────────────────────────────────────────── */
+.block-container [data-testid="stExpander"] {
     border: 1px solid #e2e8f0 !important;
     border-radius: 12px !important;
     background: #ffffff !important;
 }
-[data-testid="stExpander"] summary {
+.block-container [data-testid="stExpander"] summary {
     font-family: 'Inter', sans-serif !important;
     font-size: 0.85rem !important;
     color: #64748b !important;
     font-weight: 600 !important;
 }
 
-/* Misc */
+/* ── Misc (leaf content testids — can't collide with Streamlit chrome) ───── */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
 [data-testid="stSpinner"] p { color: #64748b !important; }
 [data-testid="stAlert"] { border-radius: 10px !important; }
-
-/* Narrow remove buttons */
-div[data-testid="column"] [data-testid="stButton"] > button {
-    min-width: 44px !important;
-    padding: 0.35rem 0.5rem !important;
-    text-align: center !important;
-}
 </style>
 """,
     unsafe_allow_html=True,
@@ -380,8 +394,8 @@ if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
 if "ingested_files" not in st.session_state:
     st.session_state.ingested_files = set()
-if "pending_query" not in st.session_state:
-    st.session_state.pending_query = ""
+if "chat_input" not in st.session_state:
+    st.session_state.chat_input = ""
 
 pipeline: RAGPipeline = st.session_state.pipeline
 
@@ -413,7 +427,7 @@ def render_sources(sources: list):
 
 
 def click_example(text: str):
-    st.session_state.pending_query = text
+    st.session_state.chat_input = text
 
 
 # ── Sidebar ────────────────────────────────────────────────────────────────────
@@ -437,7 +451,7 @@ with st.sidebar:
     )
     if not ollama_ok:
         st.code("ollama serve", language="bash")
-    st.caption(ollama_msg)
+    st.caption(escape(ollama_msg))
     st.divider()
 
     st.markdown("#### Model")
@@ -457,10 +471,15 @@ with st.sidebar:
     if not all_options:
         all_options = ["llama3.2"]
 
+    if pipeline.model in all_options:
+        model_index = all_options.index(pipeline.model)
+    else:
+        model_index = 0
+
     selected_model = st.selectbox(
         "Active model",
         options=all_options,
-        index=0,
+        index=model_index,
         label_visibility="collapsed",
     )
     pipeline.model = selected_model
@@ -502,14 +521,14 @@ with st.sidebar:
     if doc_list:
         st.markdown("#### Indexed files")
         for doc in doc_list:
-            c1, c2 = st.columns([0.9, 0.1])
+            c1, c2 = st.columns([0.65, 0.35])
             c1.markdown(
                 f'<p style="font-size:0.82rem;font-family:Inter,sans-serif;'
                 f'color:#dbe4f0;margin:4px 0;overflow:hidden;text-overflow:ellipsis;'
                 f'white-space:nowrap;" title="{escape(doc)}">{escape(doc)}</p>',
                 unsafe_allow_html=True,
             )
-            if c2.button("×", key=f"del_{doc}", use_container_width=True):
+            if c2.button("Remove", key=f"del_{doc}", use_container_width=True):
                 pipeline.remove_document(doc)
                 st.session_state.ingested_files.discard(doc)
                 st.rerun()
@@ -620,9 +639,10 @@ for msg in st.session_state.chat_history:
             unsafe_allow_html=True,
         )
 
-        st.markdown('<div class="assistant-body">', unsafe_allow_html=True)
-        st.markdown(msg["content"])
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="assistant-body">\n\n{msg["content"]}\n\n</div>',
+            unsafe_allow_html=True,
+        )
 
         render_sources(meta.get("sources", []))
         st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
@@ -635,18 +655,15 @@ st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
 with st.form(key="chat_form", clear_on_submit=True):
     user_input = st.text_area(
         "Ask anything",
-        value=st.session_state.pending_query,
         height=90,
         placeholder="Ask about your syllabus, or explore a research topic...",
         label_visibility="collapsed",
+        key="chat_input",
     )
     submit = st.form_submit_button("Send", use_container_width=True)
 
-if st.session_state.pending_query:
-    st.session_state.pending_query = ""
 
-
-# ── Handle submission ──────────────────────────────────────────────────────────
+# ── Handle submission ────────────────────────────────────────────────────────────
 
 if submit and user_input.strip():
     question = user_input.strip()
