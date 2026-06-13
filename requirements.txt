@@ -1,0 +1,29 @@
+# ─────────────────────────────────────────────
+# AI-Powered Academic Assistant — Dependencies
+# Ollama edition (fully local, no API key)
+# CPU-only — no GPU required
+# ─────────────────────────────────────────────
+
+# Must be first — tells pip where to find CPU torch wheels
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Web UI
+streamlit>=1.32.0
+
+# Document parsing
+PyPDF2>=3.0.1
+python-docx>=1.1.0
+
+# Embeddings (CPU-only; no CUDA binaries pulled in)
+sentence-transformers>=2.7.0
+torch==2.12.0+cpu
+
+# Vector store (CPU build — no CUDA dependency)
+faiss-cpu>=1.8.0
+
+# Local LLM via Ollama (Python client only; model runs in Ollama daemon)
+ollama>=0.2.0
+
+# Utilities
+numpy>=1.26.0
+tqdm>=4.66.0
