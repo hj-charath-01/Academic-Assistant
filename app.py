@@ -40,6 +40,7 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     border-radius: 0 8px 8px 8px;
     padding: 12px 16px;
     margin: 10px 0 4px 0;
+    color: #1e293b;
 }
 .assistant-msg {
     background: #F0FDF4;
@@ -47,6 +48,7 @@ html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
     border-radius: 0 8px 8px 8px;
     padding: 12px 16px;
     margin: 4px 0 10px 0;
+    color: #1e293b;
 }
 
 /* ── Mode badges ── */
